@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "src/index.ts"
     }
-  ],
-  "env": {
-    "USDA_API_KEY": "@usda-api-key"
-  }
+  ]
 }
