@@ -1,0 +1,13 @@
+.env
+.env.local
+.env.production
+node_modules
+.vscode
+*.log
+dist
+coverage
+.git
+.github
+README.md
+.eslintrc
+.prettierrc
