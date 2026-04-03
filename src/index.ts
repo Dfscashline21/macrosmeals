@@ -406,6 +406,73 @@ app.get('/health', async (_req: Request, res: Response) => {
   res.status(allHealthy ? 200 : 503).json(healthStatus);
 });
 
+app.get('/', (_req: Request, res: Response) => {
+  res.status(200).json({
+    name: 'MacroMeals API',
+    version: '1.0.0',
+    description: 'API for fetching food and nutrition information from the USDA FoodData Central',
+    documentation: {
+      endpoints: [
+        {
+          path: '/',
+          method: 'GET',
+          description: 'API information and documentation'
+        },
+        {
+          path: '/health',
+          method: 'GET',
+          description: 'Health check endpoint - returns API and USDA service status'
+        },
+        {
+          path: '/foods',
+          method: 'GET',
+          description: 'Search for food items by type',
+          parameters: [
+            {
+              name: 'type',
+              required: true,
+              type: 'string',
+              description: 'Food type to search for (e.g., apple, chicken, rice)'
+            },
+            {
+              name: 'limit',
+              required: false,
+              type: 'number',
+              default: 10,
+              max: 200,
+              description: 'Number of results to return (1-200)'
+            }
+          ],
+          example: '/foods?type=apple&limit=5',
+          response: {
+            query: 'string',
+            limit: 'number',
+            totalResults: 'number',
+            foods: [
+              {
+                id: 'number',
+                description: 'string',
+                brandName: 'string | null',
+                servingSize: 'number | null',
+                servingSizeUnit: 'string | null',
+                calories: 'number | null',
+                protein: 'number | null',
+                carbs: 'number | null',
+                fat: 'number | null'
+              }
+            ]
+          }
+        }
+      ]
+    },
+    disclaimers: {
+      usda: 'The data and images from the USDA FoodData Central database are made available under the Creative Commons CC0 1.0 Universal Public Domain Dedication. While we strive for accuracy, the U.S. Department of Agriculture and Agricultural Research Service make no warranty, express or implied, regarding the accuracy, completeness, or utility of any information provided through this API.'
+    },
+    rateLimit: '100 requests per 15 minutes per IP',
+    source: 'Powered by USDA FoodData Central API'
+  });
+});
+
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
